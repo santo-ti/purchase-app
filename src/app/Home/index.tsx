@@ -5,6 +5,8 @@ import { FilterStatus } from "@/types/FilterStatus";
 import { Image, View } from "react-native";
 import { styles } from "./styles";
 
+const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE];
+
 export function Home() {
   return (
     <View style={styles.container}>
@@ -16,8 +18,11 @@ export function Home() {
       </View>
 
       <View style={styles.content}>
-        <Filter status={FilterStatus.DONE} isActive />
-        <Filter status={FilterStatus.PENDING} isActive={false} />
+        <View style={styles.filters}>
+          {FILTER_STATUS.map((status) => (
+            <Filter key={status} status={status} isActive />
+          ))}
+        </View>
       </View>
     </View>
   );
