@@ -5,7 +5,7 @@ export function Input({ ...rest }: TextInputProps) {
   return (
     <TextInput
       style={styles.container}
-      placeholder="Digite algo..."
+      placeholderTextColor="#74798B"
       {...rest}
     />
   );
