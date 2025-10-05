@@ -1,3 +1,4 @@
+import { StatusIcon } from "@/components/StatusIcon";
 import { FilterStatus } from "@/types/FilterStatus";
 import { Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { styles } from "./styles";
@@ -14,6 +15,8 @@ export function Filter({ status, isActive, ...rest }: FilterProps) {
       activeOpacity={0.8}
       {...rest}
     >
+      <StatusIcon status={status} />
+
       <Text style={styles.title}>
         {status === FilterStatus.PENDING ? "Pendentes" : "Comprados"}
       </Text>
