@@ -1,34 +1,40 @@
+import {
+  Alert,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
 import { Button } from "@/components/Button";
 import { Filter } from "@/components/Filter";
 import { Input } from "@/components/Input";
 import { Item } from "@/components/Item";
 import { FilterStatus } from "@/types/FilterStatus";
 import { useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE];
-const ITEMS = [
-  { id: "1", description: "Leite", status: FilterStatus.DONE },
-  { id: "2", description: "Ovos", status: FilterStatus.PENDING },
-  { id: "3", description: "Pão", status: FilterStatus.DONE },
-  { id: "4", description: "Manteiga", status: FilterStatus.PENDING },
-  { id: "5", description: "Café", status: FilterStatus.DONE },
-  { id: "6", description: "Frutas", status: FilterStatus.PENDING },
-  { id: "7", description: "Verduras", status: FilterStatus.DONE },
-  { id: "8", description: "Legumes", status: FilterStatus.PENDING },
-  { id: "9", description: "Arroz", status: FilterStatus.DONE },
-  { id: "10", description: "Feijão", status: FilterStatus.PENDING },
-  { id: "11", description: "Macarrão", status: FilterStatus.DONE },
-  { id: "12", description: "Carne", status: FilterStatus.PENDING },
-  { id: "13", description: "Peixe", status: FilterStatus.DONE },
-  { id: "14", description: "Frango", status: FilterStatus.PENDING },
-  { id: "15", description: "Queijo", status: FilterStatus.DONE },
-];
 
 export function Home() {
+  const [items, setItems] = useState<any>([]);
   const [filter, setFilter] = useState(FilterStatus.PENDING);
   const [description, setDescription] = useState("");
+
+  function handleAdd() {
+    if (!description.trim()) {
+      return Alert.alert("Adicionar", "Informe a descrição para adicionar.");
+    }
+
+    const newItem = {
+      id: Math.random().toString().substring(2),
+      description,
+      status: FilterStatus.PENDING,
+    };
+
+    setItems((prevState) => [...prevState, newItem]);
+  }
 
   return (
     <View style={styles.container}>
@@ -38,9 +44,8 @@ export function Home() {
         <Input
           placeholder="O que você precisa comprar?"
           onChangeText={setDescription}
-          value={description}
         />
-        <Button title="Entrar" />
+        <Button title="Adicionar" onPress={handleAdd} />
       </View>
 
       <View style={styles.content}>
@@ -60,7 +65,7 @@ export function Home() {
         </View>
 
         <FlatList
-          data={ITEMS}
+          data={items}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Item
