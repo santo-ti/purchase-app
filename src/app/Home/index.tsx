@@ -34,17 +34,17 @@ export function Home() {
       status: FilterStatus.PENDING,
     };
 
-    await storage.add(newItem);
-    await getItemsByStatus();
+    await storage.addNewItem(newItem);
+    await fetchItemsByStatus();
 
     Alert.alert("Adicionado", `Adicionado ${description}`);
     setFilter(FilterStatus.PENDING);
     setDescription("");
   }
 
-  async function getItemsByStatus() {
+  async function fetchItemsByStatus() {
     try {
-      const response = await storage.getByStatus(filter);
+      const response = await storage.getItemsByStatus(filter);
       setItems(response);
     } catch (error) {
       console.log(error);
@@ -52,8 +52,18 @@ export function Home() {
     }
   }
 
+  async function handleRemove(id: string) {
+    try {
+      await storage.removeItemById(id);
+      await fetchItemsByStatus();
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Remover", "Não foi possível remover o item.");
+    }
+  }
+
   useEffect(() => {
-    getItemsByStatus();
+    fetchItemsByStatus();
   }, [filter]);
 
   return (
@@ -92,7 +102,7 @@ export function Home() {
             <Item
               data={item}
               onToggleStatus={() => console.log("mudar o status")}
-              onRemove={() => console.log("remover")}
+              onRemove={() => handleRemove(item.id)}
             />
           )}
           showsVerticalScrollIndicator={false}

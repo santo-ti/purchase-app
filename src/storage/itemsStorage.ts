@@ -9,7 +9,7 @@ export type ItemsStorage = {
   description: string;
 };
 
-async function get(): Promise<ItemsStorage[]> {
+async function getAllItems(): Promise<ItemsStorage[]> {
   try {
     const storage = await AsyncStorage.getItem(ITEMS_STORAGE_KEY);
 
@@ -19,8 +19,8 @@ async function get(): Promise<ItemsStorage[]> {
   }
 }
 
-async function getByStatus(status: FilterStatus): Promise<ItemsStorage[]> {
-  const items = await get();
+async function getItemsByStatus(status: FilterStatus): Promise<ItemsStorage[]> {
+  const items = await getAllItems();
 
   return items.filter((item) => item.status === status);
 }
@@ -33,16 +33,23 @@ async function save(items: ItemsStorage[]): Promise<void> {
   }
 }
 
-async function add(newItem: ItemsStorage): Promise<ItemsStorage[]> {
-  const items = await get();
+async function addNewItem(newItem: ItemsStorage): Promise<void> {
+  const items = await getAllItems();
   const updatedItems = [...items, newItem];
-  await save(updatedItems);
 
-  return updatedItems;
+  await save(updatedItems);
+}
+
+async function removeItemById(id: string): Promise<void> {
+  const items = await getAllItems();
+  const updatedItems = items.filter((item) => item.id !== id);
+
+  await save(updatedItems);
 }
 
 export const storage = {
-  get,
-  getByStatus,
-  add,
+  getAllItems,
+  getItemsByStatus,
+  addNewItem,
+  removeItemById,
 };
