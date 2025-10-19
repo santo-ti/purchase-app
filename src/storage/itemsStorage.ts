@@ -9,7 +9,7 @@ export type StorageItem = {
   description: string;
 };
 
-async function getAllItems(): Promise<StorageItem[]> {
+async function getAll(): Promise<StorageItem[]> {
   try {
     const storage = await AsyncStorage.getItem(ITEMS_STORAGE_KEY);
 
@@ -19,8 +19,8 @@ async function getAllItems(): Promise<StorageItem[]> {
   }
 }
 
-async function getItemsByStatus(status: FilterStatus): Promise<StorageItem[]> {
-  const items = await getAllItems();
+async function getAllByStatus(status: FilterStatus): Promise<StorageItem[]> {
+  const items = await getAll();
 
   return items.filter((item) => item.status === status);
 }
@@ -33,15 +33,15 @@ async function save(items: StorageItem[]): Promise<void> {
   }
 }
 
-async function addNewItem(newItem: StorageItem): Promise<void> {
-  const items = await getAllItems();
+async function add(newItem: StorageItem): Promise<void> {
+  const items = await getAll();
   const updatedItems = [...items, newItem];
 
   await save(updatedItems);
 }
 
-async function removeItemById(id: string): Promise<void> {
-  const items = await getAllItems();
+async function remove(id: string): Promise<void> {
+  const items = await getAll();
   const updatedItems = items.filter((item) => item.id !== id);
 
   await save(updatedItems);
@@ -55,19 +55,19 @@ async function clear(): Promise<void> {
   }
 }
 
-function toggleStatus(status: FilterStatus): FilterStatus {
+function changeStatus(status: FilterStatus): FilterStatus {
   return status === FilterStatus.PENDING
     ? FilterStatus.DONE
     : FilterStatus.PENDING;
 }
 
-async function toggleItemStatus(id: string): Promise<void> {
-  const items = await getAllItems();
+async function toggleStatus(id: string): Promise<void> {
+  const items = await getAll();
   const updatedItems = items.map((item) =>
     item.id === id
       ? {
           ...item,
-          status: toggleStatus(item.status),
+          status: changeStatus(item.status),
         }
       : item
   );
@@ -76,10 +76,10 @@ async function toggleItemStatus(id: string): Promise<void> {
 }
 
 export const itemsStorage = {
-  getAllItems,
-  getItemsByStatus,
-  toggleItemStatus,
-  addNewItem,
-  removeItemById,
+  getAll,
+  getAllByStatus,
+  toggleStatus,
+  add,
+  remove,
   clear,
 };

@@ -34,7 +34,7 @@ export function Home() {
       status: FilterStatus.PENDING,
     };
 
-    await itemsStorage.addNewItem(newItem);
+    await itemsStorage.add(newItem);
     await fetchItemsByStatus();
 
     Alert.alert("Adicionado", `Adicionado ${description}`);
@@ -44,7 +44,7 @@ export function Home() {
 
   async function fetchItemsByStatus() {
     try {
-      const response = await itemsStorage.getItemsByStatus(filter);
+      const response = await itemsStorage.getAllByStatus(filter);
       setItems(response);
     } catch (error) {
       console.log(error);
@@ -54,7 +54,7 @@ export function Home() {
 
   async function handleRemove(id: string) {
     try {
-      await itemsStorage.removeItemById(id);
+      await itemsStorage.remove(id);
       await fetchItemsByStatus();
     } catch (error) {
       console.log(error);
@@ -89,7 +89,7 @@ export function Home() {
 
   async function handleToggleItemStatus(id: string) {
     try {
-      await itemsStorage.toggleItemStatus(id);
+      await itemsStorage.toggleStatus(id);
       await fetchItemsByStatus();
     } catch (error) {
       console.log(error);
