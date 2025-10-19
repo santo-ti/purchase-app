@@ -11,8 +11,9 @@ import { Button } from "@/components/Button";
 import { Filter } from "@/components/Filter";
 import { Input } from "@/components/Input";
 import { Item } from "@/components/Item";
+import { storage } from "@/storage/itemsStorage";
 import { FilterStatus } from "@/types/FilterStatus";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styles } from "./styles";
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE];
@@ -35,6 +36,20 @@ export function Home() {
 
     setItems((prevState) => [...prevState, newItem]);
   }
+
+  async function getItems() {
+    try {
+      const response = await storage.get();
+      setItems(response);
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Erro", "Não foi possível carregar os itens.");
+    }
+  }
+
+  useEffect(() => {
+    getItems();
+  }, []);
 
   return (
     <View style={styles.container}>
