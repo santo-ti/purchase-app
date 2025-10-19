@@ -11,14 +11,14 @@ type ItemData = {
 
 type ItemProps = {
   data: ItemData;
-  onToggleStatus: () => void;
+  onStatus: () => void;
   onRemove: () => void;
 };
 
-export function Item({ data, onToggleStatus, onRemove }: ItemProps) {
+export function Item({ data, onStatus, onRemove }: ItemProps) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity activeOpacity={0.7} onPress={onToggleStatus}>
+      <TouchableOpacity activeOpacity={0.7} onPress={onStatus}>
         <StatusIcon status={data.status} />
       </TouchableOpacity>
 
