@@ -67,6 +67,7 @@ export function Home() {
       {
         text: "Cancelar",
         style: "cancel",
+        isPreferred: true,
       },
       {
         text: "Sim",
