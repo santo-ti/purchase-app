@@ -47,7 +47,7 @@ export function Home() {
       const response = await itemsStorage.getAllByStatus(filter);
       setItems(response);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert("Erro", "Não foi possível carregar os itens.");
     }
   }
@@ -57,7 +57,7 @@ export function Home() {
       await itemsStorage.remove(id);
       await fetchItemsByStatus();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert("Erro", "Não foi possível remover o item.");
     }
   }
@@ -82,7 +82,7 @@ export function Home() {
       await itemsStorage.clear();
       setItems([]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert("Erro", "Não foi possível remover todos os itens.");
     }
   }
@@ -92,7 +92,7 @@ export function Home() {
       await itemsStorage.toggleStatus(id);
       await fetchItemsByStatus();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert("Erro", "Não foi possível alterar o status do item.");
     }
   }
