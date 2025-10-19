@@ -35,13 +35,13 @@ export function Home() {
     };
 
     await storage.add(newItem);
-    await getItems();
+    await getItemsByStatus();
     setDescription("");
   }
 
-  async function getItems() {
+  async function getItemsByStatus() {
     try {
-      const response = await storage.get();
+      const response = await storage.getByStatus(filter);
       setItems(response);
     } catch (error) {
       console.log(error);
@@ -50,8 +50,8 @@ export function Home() {
   }
 
   useEffect(() => {
-    getItems();
-  }, []);
+    getItemsByStatus();
+  }, [filter]);
 
   return (
     <View style={styles.container}>
