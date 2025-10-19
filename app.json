@@ -22,7 +22,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.comprar"
+      "package": "com.santo.comprar"
     },
     "web": {
       "favicon": "./assets/favicon.png"
