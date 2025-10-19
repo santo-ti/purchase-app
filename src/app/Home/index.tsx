@@ -11,7 +11,7 @@ import { Button } from "@/components/Button";
 import { Filter } from "@/components/Filter";
 import { Input } from "@/components/Input";
 import { Item } from "@/components/Item";
-import { storage } from "@/storage/itemsStorage";
+import { ItemsStorage, storage } from "@/storage/itemsStorage";
 import { FilterStatus } from "@/types/FilterStatus";
 import { useEffect, useState } from "react";
 import { styles } from "./styles";
@@ -19,11 +19,11 @@ import { styles } from "./styles";
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE];
 
 export function Home() {
-  const [items, setItems] = useState<any>([]);
   const [filter, setFilter] = useState(FilterStatus.PENDING);
   const [description, setDescription] = useState("");
+  const [items, setItems] = useState<ItemsStorage[]>([]);
 
-  function handleAdd() {
+  async function handleAdd() {
     if (!description.trim()) {
       return Alert.alert("Adicionar", "Informe a descrição para adicionar.");
     }
@@ -34,7 +34,9 @@ export function Home() {
       status: FilterStatus.PENDING,
     };
 
-    setItems((prevState) => [...prevState, newItem]);
+    await storage.add(newItem);
+    await getItems();
+    setDescription("");
   }
 
   async function getItems() {
@@ -59,6 +61,7 @@ export function Home() {
         <Input
           placeholder="O que você precisa comprar?"
           onChangeText={setDescription}
+          value={description}
         />
         <Button title="Adicionar" onPress={handleAdd} />
       </View>
