@@ -3,13 +3,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ITEMS_STORAGE_KEY = "@comprar:items";
 
-export type ItemsStorage = {
+export type StorageItem = {
   id: string;
   status: FilterStatus;
   description: string;
 };
 
-async function getAllItems(): Promise<ItemsStorage[]> {
+async function getAllItems(): Promise<StorageItem[]> {
   try {
     const storage = await AsyncStorage.getItem(ITEMS_STORAGE_KEY);
 
@@ -19,13 +19,13 @@ async function getAllItems(): Promise<ItemsStorage[]> {
   }
 }
 
-async function getItemsByStatus(status: FilterStatus): Promise<ItemsStorage[]> {
+async function getItemsByStatus(status: FilterStatus): Promise<StorageItem[]> {
   const items = await getAllItems();
 
   return items.filter((item) => item.status === status);
 }
 
-async function save(items: ItemsStorage[]): Promise<void> {
+async function save(items: StorageItem[]): Promise<void> {
   try {
     await AsyncStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(items));
   } catch (error) {
@@ -33,7 +33,7 @@ async function save(items: ItemsStorage[]): Promise<void> {
   }
 }
 
-async function addNewItem(newItem: ItemsStorage): Promise<void> {
+async function addNewItem(newItem: StorageItem): Promise<void> {
   const items = await getAllItems();
   const updatedItems = [...items, newItem];
 
@@ -75,7 +75,7 @@ async function toggleItemStatus(id: string): Promise<void> {
   await save(updatedItems);
 }
 
-export const storage = {
+export const itemsStorage = {
   getAllItems,
   getItemsByStatus,
   toggleItemStatus,

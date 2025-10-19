@@ -11,7 +11,7 @@ import { Button } from "@/components/Button";
 import { Filter } from "@/components/Filter";
 import { Input } from "@/components/Input";
 import { Item } from "@/components/Item";
-import { ItemsStorage, storage } from "@/storage/itemsStorage";
+import { StorageItem, itemsStorage } from "@/storage/itemsStorage";
 import { FilterStatus } from "@/types/FilterStatus";
 import { useEffect, useState } from "react";
 import { styles } from "./styles";
@@ -21,7 +21,7 @@ const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE];
 export function Home() {
   const [filter, setFilter] = useState(FilterStatus.PENDING);
   const [description, setDescription] = useState("");
-  const [items, setItems] = useState<ItemsStorage[]>([]);
+  const [items, setItems] = useState<StorageItem[]>([]);
 
   async function handleAdd() {
     if (!description.trim()) {
@@ -34,7 +34,7 @@ export function Home() {
       status: FilterStatus.PENDING,
     };
 
-    await storage.addNewItem(newItem);
+    await itemsStorage.addNewItem(newItem);
     await fetchItemsByStatus();
 
     Alert.alert("Adicionado", `Adicionado ${description}`);
@@ -44,7 +44,7 @@ export function Home() {
 
   async function fetchItemsByStatus() {
     try {
-      const response = await storage.getItemsByStatus(filter);
+      const response = await itemsStorage.getItemsByStatus(filter);
       setItems(response);
     } catch (error) {
       console.log(error);
@@ -54,7 +54,7 @@ export function Home() {
 
   async function handleRemove(id: string) {
     try {
-      await storage.removeItemById(id);
+      await itemsStorage.removeItemById(id);
       await fetchItemsByStatus();
     } catch (error) {
       console.log(error);
@@ -79,7 +79,7 @@ export function Home() {
 
   async function onClear() {
     try {
-      await storage.clear();
+      await itemsStorage.clear();
       setItems([]);
     } catch (error) {
       console.log(error);
@@ -89,7 +89,7 @@ export function Home() {
 
   async function handleToggleItemStatus(id: string) {
     try {
-      await storage.toggleItemStatus(id);
+      await itemsStorage.toggleItemStatus(id);
       await fetchItemsByStatus();
     } catch (error) {
       console.log(error);
